@@ -1,12 +1,14 @@
 package hero
 
+import "errors"
+
 type heroH2Repository struct {
-	heroes []Hero
+	heroes []*Hero
 }
 
 func NewHeroH2Repository() HeroRepository {
-	return &heroRepository{
-		[]Hero{
+	return &heroH2Repository{
+		[]*Hero{
 			{ID: 11, Name: "Dr Nice"},
 			{ID: 12, Name: "Narco"},
 			{ID: 13, Name: "Bombasto"},
@@ -26,16 +28,16 @@ func (r *heroH2Repository) Store(hero *Hero) (*Hero, error) {
 }
 
 func (r *heroH2Repository) Find(id int) (*Hero, error) {
-	for i, h := range r.heroes {
+	for _, h := range r.heroes {
 		if h.ID == id {
 			return h, nil
 		}
 	}
-	return nil, error
+	return nil, errors.New("Hero Not found")
 }
 
 func (r *heroH2Repository) FindAll() ([]*Hero, error) {
-	return &r.heroes, nil
+	return r.heroes, nil
 }
 
 func (r *heroH2Repository) Upadte(hero *Hero) error {
