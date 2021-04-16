@@ -24,7 +24,9 @@ func NewHeroH2Repository() HeroRepository {
 }
 
 func (r *heroH2Repository) Store(hero *Hero) (*Hero, error) {
-	return nil, nil
+	hero.ID = r.heroes[len(r.heroes)-1].ID + 1
+	r.heroes = append(r.heroes, hero)
+	return hero, nil
 }
 
 func (r *heroH2Repository) Find(id int) (*Hero, error) {
@@ -40,10 +42,23 @@ func (r *heroH2Repository) FindAll() ([]*Hero, error) {
 	return r.heroes, nil
 }
 
-func (r *heroH2Repository) Upadte(hero *Hero) error {
-	return nil
+func (r *heroH2Repository) Update(hero *Hero) error {
+	for _, h := range r.herose {
+		if h.ID == hero.id {
+			h.Name = hero.Name
+			return nil
+		}
+	}
+	return errors.New("Hero Not found")
 }
 
 func (r *heroH2Repository) Destroy(id int) error {
-	return nil
+	for i, h := range r.heroes {
+		if h.ID == id {
+			r.heroes[i] = r.heroes[len(r.heroes)-1]
+			r.heroes = r.heroes[:len(r.heroes)-1]
+			return nil
+		}
+	}
+	return errors.New("Hero Not found")
 }
