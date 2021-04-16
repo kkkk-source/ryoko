@@ -24,7 +24,14 @@ func NewHeroH2Repository() HeroRepository {
 }
 
 func (r *heroH2Repository) Store(hero *Hero) (*Hero, error) {
-	hero.ID = r.heroes[len(r.heroes)-1].ID + 1
+	// Find the bigger number and use it to create an unique one
+	id := r.heroes[0].ID
+	for _, h := range r.heroes {
+		if id < h.ID {
+			id = h.ID
+		}
+	}
+	hero.ID = id + 1
 	r.heroes = append(r.heroes, hero)
 	return hero, nil
 }
@@ -43,8 +50,8 @@ func (r *heroH2Repository) FindAll() ([]*Hero, error) {
 }
 
 func (r *heroH2Repository) Update(hero *Hero) error {
-	for _, h := range r.herose {
-		if h.ID == hero.id {
+	for _, h := range r.heroes {
+		if h.ID == hero.ID {
 			h.Name = hero.Name
 			return nil
 		}
