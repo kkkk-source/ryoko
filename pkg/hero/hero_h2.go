@@ -19,6 +19,7 @@ func NewHeroH2Repository() HeroRepository {
 			{ID: 18, Name: "Dr IQ"},
 			{ID: 19, Name: "Magma"},
 			{ID: 20, Name: "Tornado"},
+			{ID: 21, Name: "Tornado"},
 		},
 	}
 }
@@ -47,6 +48,16 @@ func (r *heroH2Repository) Find(id int) (*Hero, error) {
 
 func (r *heroH2Repository) FindAll() ([]*Hero, error) {
 	return r.heroes, nil
+}
+
+func (r *heroH2Repository) FindByName(name string) ([]*Hero, error) {
+	var heroes []*Hero
+	for _, h := range r.heroes {
+		if name == h.Name {
+			heroes = append(heroes, h)
+		}
+	}
+	return heroes, nil
 }
 
 func (r *heroH2Repository) Update(hero *Hero) error {
