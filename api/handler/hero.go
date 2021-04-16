@@ -54,8 +54,14 @@ func (h *heroHandler) GetHero(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *heroHandler) GetHeroes(w http.ResponseWriter, r *http.Request) {
-	heroes, _ := h.service.FindAll()
+	var heroes []*hero.Hero
+	nameTerm := r.URL.Query().Get("name")
 	w.Header().Set("Content-Type", "application/json")
+	if nameTerm != "" {
+		heroes, _ = h.service.FindByName(nameTerm)
+	} else {
+		heroes, _ = h.service.FindAll()
+	}
 	json.NewEncoder(w).Encode(heroes)
 }
 
