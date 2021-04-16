@@ -25,6 +25,11 @@ func (s *HeroService) FindAll() ([]*Hero, error) {
 	return heroes, err
 }
 
+func (s *HeroService) FindByName(name string) ([]*Hero, error) {
+	heroes, err := s.repo.FindByName(name)
+	return heroes, err
+}
+
 func (s *HeroService) Update(hero *Hero) error {
 	return s.repo.Update(hero)
 }
