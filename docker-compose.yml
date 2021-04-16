@@ -4,8 +4,6 @@ services:
         image: mysql:5.7
         env_file:
           - ./.env
-        ports:
-          - "3307:3306"
         volumes:
             - ./.mysql:/var/lib/mysql
         networks:
