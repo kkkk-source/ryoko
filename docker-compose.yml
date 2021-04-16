@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+    ryokodb:
+        image: mysql:5.7
+        env_file:
+          - ./.env
+        ports:
+          - "3307:3306"
+        volumes:
+            - ./.mysql:/var/lib/mysql
+        networks:
+            - ryokonet
+    ryokogo:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8081:8080"
+        depends_on:
+            - ryokodb
+        networks:
+            - ryokonet
+networks:
+    ryokonet:
+        driver: bridge
