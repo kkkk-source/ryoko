@@ -1,16 +1,26 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/moll-y/ryoko/api/handler"
 	"github.com/moll-y/ryoko/pkg/hero"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	heroRepository := hero.NewHeroH2Repository()
+	db, err := sql.Open("mysql", "root:toor@tcp(ryokodb:3306)/ryoko")
+	defer db.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	heroRepository := hero.NewHeroMySQLRepository(db)
 	heroService := hero.NewHeroService(heroRepository)
 	heroHandler := handler.NewHeroHandler(heroService)
 
