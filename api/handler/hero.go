@@ -37,7 +37,7 @@ func (h *heroHandler) AddHero(w http.ResponseWriter, r *http.Request) {
 
 func (h *heroHandler) GetHero(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["ID"])
+	id, err := strconv.ParseInt(vars["ID"], 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Bad Request")
@@ -82,7 +82,7 @@ func (h *heroHandler) UpdateHero(w http.ResponseWriter, r *http.Request) {
 
 func (h *heroHandler) DeleteHero(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["ID"])
+	id, err := strconv.ParseInt(vars["ID"], 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("Bad Request")

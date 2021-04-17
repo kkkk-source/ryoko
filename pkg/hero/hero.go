@@ -1,6 +1,6 @@
 package hero
 
 type Hero struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID   int64  `json:"id" db:"id"`
+	Name string `json:"name" db:"name"`
 }

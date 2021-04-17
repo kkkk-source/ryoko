@@ -15,7 +15,7 @@ func (s *HeroService) Save(hero *Hero) (*Hero, error) {
 	return heroCreated, err
 }
 
-func (s *HeroService) Find(id int) (*Hero, error) {
+func (s *HeroService) Find(id int64) (*Hero, error) {
 	hero, err := s.repo.Find(id)
 	return hero, err
 }
@@ -34,6 +34,6 @@ func (s *HeroService) Update(hero *Hero) error {
 	return s.repo.Update(hero)
 }
 
-func (s *HeroService) Destroy(id int) error {
+func (s *HeroService) Destroy(id int64) error {
 	return s.repo.Destroy(id)
 }

@@ -37,7 +37,7 @@ func (r *heroH2Repository) Store(hero *Hero) (*Hero, error) {
 	return hero, nil
 }
 
-func (r *heroH2Repository) Find(id int) (*Hero, error) {
+func (r *heroH2Repository) Find(id int64) (*Hero, error) {
 	for _, h := range r.heroes {
 		if h.ID == id {
 			return h, nil
@@ -70,7 +70,7 @@ func (r *heroH2Repository) Update(hero *Hero) error {
 	return errors.New("Hero Not found")
 }
 
-func (r *heroH2Repository) Destroy(id int) error {
+func (r *heroH2Repository) Destroy(id int64) error {
 	for i, h := range r.heroes {
 		if h.ID == id {
 			r.heroes[i] = r.heroes[len(r.heroes)-1]
