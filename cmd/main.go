@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/moll-y/ryoko/api/handler"
 	"github.com/moll-y/ryoko/pkg/hero"
-
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -30,5 +30,13 @@ func main() {
 	r.HandleFunc("/heroes", heroHandler.GetHeroes).Methods(http.MethodGet)
 	r.HandleFunc("/heroes", heroHandler.AddHero).Methods(http.MethodPost)
 	r.HandleFunc("/heroes", heroHandler.UpdateHero).Methods(http.MethodPut)
-	log.Fatal(http.ListenAndServe(":8080", r))
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:4200"},
+		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE"},
+		AllowCredentials: true,
+	})
+
+	handler := c.Handler(r)
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
