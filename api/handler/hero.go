@@ -20,14 +20,15 @@ func NewHeroHandler(service *hero.HeroService) *heroHandler {
 }
 
 func (h *heroHandler) AddHero(w http.ResponseWriter, r *http.Request) {
-	var hero *hero.Hero
+	w.Header().Set("Content-Type", "application/json")
+
+	var hero hero.Hero
 	err := json.NewDecoder(r.Body).Decode(&hero)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	heroCreated, err := h.service.Save(hero)
+	heroCreated, err := h.service.Save(&hero)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -36,6 +37,8 @@ func (h *heroHandler) AddHero(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *heroHandler) GetHero(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["ID"], 10, 64)
 	if err != nil {
@@ -44,7 +47,6 @@ func (h *heroHandler) GetHero(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	hero, err := h.service.Find(id)
-	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode("Hero Not found")
@@ -54,9 +56,10 @@ func (h *heroHandler) GetHero(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *heroHandler) GetHeroes(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var heroes []*hero.Hero
 	nameTerm := r.URL.Query().Get("name")
-	w.Header().Set("Content-Type", "application/json")
 	if nameTerm != "" {
 		heroes, _ = h.service.FindByName(nameTerm)
 	} else {
@@ -66,13 +69,15 @@ func (h *heroHandler) GetHeroes(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *heroHandler) UpdateHero(w http.ResponseWriter, r *http.Request) {
-	var hero *hero.Hero
+	w.Header().Set("Content-Type", "application/json")
+
+	var hero hero.Hero
 	err := json.NewDecoder(r.Body).Decode(&hero)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = h.service.Update(hero)
+	err = h.service.Update(&hero)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -81,6 +86,8 @@ func (h *heroHandler) UpdateHero(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *heroHandler) DeleteHero(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["ID"], 10, 64)
 	if err != nil {
